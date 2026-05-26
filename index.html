@@ -71,12 +71,13 @@
 
   /* Lower content panels look exceptionally sharp floating over the dynamic background overlay */
   /* ── PORTAL CARDS SIDE-BY-SIDE GRID ARCHITECTURE ── */
+  /* ── PORTAL CARDS SIDE-BY-SIDE GRID ARCHITECTURE ── */
   #portals { 
     padding: 4rem 0 7rem 0; 
     border-bottom: 1px solid var(--border); 
   }
   
-  /* FIXED: Explicitly enforces a balanced side-by-side grid distribution layout */
+  /* Enforces a balanced side-by-side grid distribution layout */
   .portal-grid { 
     display: grid; 
     grid-template-columns: 1fr 1fr; /* Spreads cards side-by-side split evenly */
@@ -165,13 +166,24 @@
     transform: scale(1) translateY(0);
   }
 
-  /* Responsive breakpoint configuration handles small screen constraints gracefully */
+  /* Mobile Responsive rules for layout cards collapsing constraints */
   @media (max-width: 860px) {
+    #hero { padding-top: 8rem; height: auto; min-height: 100vh; }
+    .hero-container { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
+    .hero-text-side { text-align: center; }
+    .hero-name { font-size: 2.2rem; }
+    .hero-welcome { font-size: 1rem; line-height: 1.6; }
+    .hero-portrait-side { order: -1; }
+    .portrait-frame { width: 220px; height: 280px; }
+    #portals { padding: 4rem 0; }
     .portal-grid { 
-      grid-template-columns: 1fr; /* Stacks vertically only on mobile viewports */
+      grid-template-columns: 1fr !important; /* Stacks vertically only on mobile viewports */
       gap: 1.5rem; 
     }
-    .portal-card { padding: 2.5rem 2rem; }
+    .portal-card { padding: 2.5rem 1.5rem; }
+    .card-svg-holder { width: 150px; height: 150px; right: -10px; bottom: -10px; }
+    #contact { padding: 4rem 0 2rem 0; }
+    .contact-links-inline { flex-direction: column; gap: 0.8rem; align-items: center; }
   }
   #contact { padding: 7rem 0 4rem 0; }
   .sec-label { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: block; }
@@ -270,7 +282,8 @@
           </g>
           
           <path d="M15 110 L30 110 M90 25 L90 40" stroke="var(--gold)" stroke-width="0.5" opacity="0.3"/>
-          <path d="M115 130 L125 125 L135 132 L145 122 L155 135" stroke="var(--gold-light)" stroke-width="0.8" opacity="0.25"/> </svg>
+          <path d="M115 130 L125 125 L135 132 L145 122 L155 135" stroke="var(--gold-light)" stroke-width="0.8" opacity="0.25"/>
+        </svg>
       </div>
     </a>
 
@@ -303,7 +316,6 @@
 
   </div>
 </section>
-
   <section id="contact">
     <span class="sec-label">03 · Inquiries</span>
     <div class="contact-hero">
