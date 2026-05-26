@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terrestrial Observations · Gregory Mathews Ben</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Cormorant+Garamond:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  body { background: #0a0d16; color: #f5f0e8; font-family: 'EB Garamond', Georgia, serif; padding: 6rem 2rem; line-height: 1.8; }
+  .wrapper { max-width: 850px; margin: 0 auto; }
+  .back-btn { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: #c8a96e; text-decoration: none; text-transform: uppercase; letter-spacing: 0.15em; display: inline-block; margin-bottom: 3rem; }
+  h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300; font-size: 2.8rem; margin-bottom: 3rem; }
+  .travel-grid { display: flex; flex-direction: column; gap: 4rem; }
+  .travel-item { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2.5rem; align-items: center; border-bottom: 1px solid rgba(200,169,110,0.12); padding-bottom: 3rem; }
+  .travel-item:last-child { border: none; }
+  .img-link { border: 1px solid rgba(200,169,110,0.15); display: block; overflow: hidden; background: #000; }
+  .img-link img { width: 100%; height: 240px; object-fit: cover; filter: grayscale(20%) brightness(0.8); transition: transform 0.5s, filter 0.5s; display: block; }
+  .img-link:hover img { transform: scale(1.02); filter: grayscale(0%) brightness(1); }
+  .meta { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: #c8a96e; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; margin-bottom: 0.8rem; }
+  .notes { font-style: italic; color: rgba(220,210,195,0.6); font-size: 0.95rem; margin-top: 0.8rem; border-left: 1px solid rgba(200,169,110,0.3); padding-left: 0.8rem; }
+  @media(max-width:768px){ .travel-item { grid-template-columns: 1fr; gap: 1.5rem; } }
+  /* ── NAV BAR RESTORED & OPTIMIZED ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.4rem 3.5rem;
+    background: linear-gradient(to bottom, rgba(0,0,15,0.85) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+  }
+  .nav-logo {
+    font-family: var(--font-display); font-size: 1.1rem;
+    color: var(--gold); letter-spacing: 0.08em; font-weight: 600; text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--font-mono); font-size: 0.7rem; font-weight: 300;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(220,210,195,0.6); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">GMB</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="travel.html">Travel</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+<div class="wrapper">
+  <a href="index.html" class="back-btn">← Return to Hub</a>
+  <h1>Terrestrial Observations</h1>
+  
+  <div class="travel-grid">
+    <div class="travel-item">
+      <a href="spiti.html" class="img-link"><img src="spiti_cover.webp" alt="Spiti"></a>
+      <div>
+        <div class="meta">32.2461° N, 78.0349° E · PASS</div>
+        <h2>Manali &amp; Spiti</h2>
+        <p>Arid alpine ranges where thin air layers allow pristine visibility parameters.</p>
+        <div class="notes">"Zero light pollution footprints. Night fields reveal intense sky clarity profiles."</div>
+      </div>
+    </div>
+
+    <div class="travel-item">
+      <a href="meghalaya.html" class="img-link"><img src="meghalaya_cover.webp" alt="Meghalaya"></a>
+      <div>
+        <div class="meta">25.5788° N, 91.8933° E · VALLEY</div>
+        <h2>The Abode of Clouds</h2>
+        <p>High-humidity geographic canyons tracking continuous cloud formation patterns.</p>
+        <div class="notes">"Mist flowing sequentially through steep gorges. Light scatters extensively across vapor layers."</div>
+      </div>
+    </div>
+
+    <div class="travel-item">
+      <a href="nainital.html" class="img-link"><img src="nainital_cover.webp" alt="Nainital"></a>
+      <div>
+        <div class="meta">29.3919° N, 79.4542° E · RANGE</div>
+        <h2>Nainital</h2>
+        <p>Capturing slow exposures beside symmetrical highland lake water surfaces.</p>
+        <div class="notes">"Reflective water boundaries serving effectively as a collection mirror frame during twilight."</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

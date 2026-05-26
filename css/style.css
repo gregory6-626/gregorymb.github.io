@@ -1,0 +1,75 @@
+/* css/style.css */
+:root {
+  --gold: #c8a96e;
+  --gold-light: #e2c99a;
+  --gold-dim: rgba(200,169,110,0.18);
+  --white: #f5f0e8;
+  --muted: rgba(220,210,195,0.65);
+  --bg-space: #00000f;
+  --border: rgba(200,169,110,0.15);
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'EB Garamond', Georgia, serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+/* Base Body Configuration - Restores Background & Text Globally */
+html, body {
+  background: var(--bg-space);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.75;
+  cursor: none; /* Hides default mouse to utilize custom cursor */
+}
+
+/* Custom Interactive Cursor Elements */
+#cursor {
+  position: fixed; top: 0; left: 0; width: 10px; height: 10px;
+  background: var(--gold); border-radius: 50%; pointer-events: none;
+  z-index: 9999; transform: translate(-50%,-50%);
+  transition: width 0.15s, height 0.15s, background 0.15s;
+}
+#cursor-ring {
+  position: fixed; top: 0; left: 0; width: 36px; height: 36px;
+  border: 1px solid rgba(200,169,110,0.4); border-radius: 50%;
+  pointer-events: none; z-index: 9998; transform: translate(-50%,-50%);
+  transition: transform 0.12s ease, width 0.2s, height 0.2s;
+}
+
+/* Header Navigation Layout */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.4rem 3.5rem;
+  background: linear-gradient(to bottom, rgba(0,0,15,0.85) 0%, transparent 100%);
+  backdrop-filter: blur(2px);
+}
+.nav-logo {
+  font-family: var(--font-display); font-size: 1.1rem;
+  color: var(--gold); letter-spacing: 0.08em; font-weight: 600; text-decoration: none;
+}
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-family: var(--font-mono); font-size: 0.7rem; font-weight: 300;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(220,210,195,0.6); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.pub-title a.pub-link {
+  color: #fff9f0;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(200, 169, 110, 0.2);
+  transition: color 0.2s ease, border-color 0.2s ease;
+  display: inline-block;
+}
+
+.pub-title a.pub-link:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+@media (max-width: 860px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { gap: 1.2rem; }
+  body { cursor: auto; }
+  #cursor, #cursor-ring { display: none; }
+}

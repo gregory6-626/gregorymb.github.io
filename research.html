@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Portfolio · Gregory Mathews Ben</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+  /* Base structural reset for full-page simulation */
+  body { padding: 0; position: relative; }
+  
+  /* FIXED: The canvas now covers the entire page background seamlessly */
+  #research-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1; /* Sits behind everything */
+    pointer-events: none;
+  }
+  #disc-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  
+  /* Foreground content container pushing text below the nav area */
+  .wrapper { 
+    max-width: 850px; 
+    margin: 0 auto; 
+    padding: 6.5rem 2rem 6rem 2rem; /* FIXED: Shifted padding up tightly under the navigation header */
+    position: relative; 
+    z-index: 2; /* Sits on top of the simulation safely */
+  }
+
+  /* Spacious, elegant typography styling */
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    margin-bottom: 2.5rem;
+    color: #fff9f0; /* Ultra-bright gold-tinted white for perfect readability */
+    text-shadow: 0 0 30px rgba(0,0,0,1), 0 4px 12px rgba(0,0,0,1);
+    line-height: 1.1;
+  }
+  
+  .sec-intro { 
+    color: #f5f0e8; /* Crisp warm white for high contrast */
+    font-size: 1.15rem; 
+    margin-bottom: 5rem; 
+    text-shadow: 0 0 20px rgba(0,0,0,1), 0 2px 8px rgba(0,0,0,1);
+    line-height: 1.8;
+  }
+  
+  /* Clean editorial text rows */
+  .editorial-list { display: flex; flex-direction: column; }
+  .editorial-row { 
+    display: grid; 
+    grid-template-columns: 140px 1fr; 
+    gap: 2rem; 
+    padding: 3.5rem 0; 
+    border-top: 1px solid var(--border); 
+  }
+  .row-meta { 
+    font-family: var(--font-mono); 
+    font-size: 0.8rem; 
+    color: var(--gold); 
+    letter-spacing: 0.1em; 
+  }
+  .row-content h3 { 
+    font-family: var(--font-display); 
+    font-size: 1.7rem; 
+    font-weight: 400; 
+    margin-bottom: 0.8rem; 
+    line-height: 1.3; 
+    color: #fff9f0; /* Crisp white titles */
+    text-shadow: 0 0 15px rgba(0,0,0,1);
+  }
+  .row-content p { 
+    font-size: 0.98rem; 
+    color: var(--white); /* Brighter base text body color */
+    text-shadow: 0 0 15px rgba(0,0,0,1), 0 1px 4px rgba(0,0,0,1); 
+  }
+ /* ── DISTINCT STANDOUT PUBLICATIONS LAYOUT BLOCK ── */
+  .publications-section {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 2px solid var(--gold-dim); /* Prominent layout break marker */
+  }
+  .section-subtitle {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: #fff9f0;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 15px rgba(0,0,0,1);
+  }
+  .pub-list { list-style: none; }
+  .pub-item {
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .pub-item:last-child { border-bottom: none; }
+  .pub-year {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    padding-top: 0.2rem;
+  }
+  .pub-title {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: #fff9f0;
+    font-style: italic;
+    line-height: 1.6;
+    text-shadow: 0 0 15px rgba(0,0,0,1);
+  }
+  .pub-authors {
+    font-size: 0.92rem;
+    color: var(--white);
+    margin-top: 0.4rem;
+    opacity: 0.85;
+  }
+  .pub-journal { 
+    font-family: var(--font-mono); 
+    font-size: 0.75rem; 
+    color: var(--gold-light); 
+    text-transform: uppercase; 
+    margin-top: 0.6rem; 
+    letter-spacing: 0.05em;
+  }
+  
+  @media(max-width:768px) { 
+    .wrapper { padding-top: 5.5rem; }
+    .editorial-row, .pub-item { grid-template-columns: 1fr; gap: 0.6rem; padding: 2rem 0; } 
+    .row-meta, .pub-year { margin-bottom: 0.1rem; }
+    .publications-section { margin-top: 2rem; padding-top: 1.5rem; }
+  }
+</style>
+</head>
+
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">GMB</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="travel.html">Travel</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div id="research-background">
+  <canvas id="disc-canvas"></canvas>
+</div>
+
+<div class="wrapper">
+  <h1>Protoplanetary Disc Evolution</h1>
+  <p class="sec-intro">
+    My research focuses on understanding the survival and dissipation of protoplanetary discs-the rotating environments of gas and dust where planets are born. By combining large-scale cluster surveys with multi-wavelength time-series data, I investigate the underlying physical mechanisms that allow certain rare stellar systems to preserve their discs for more than tens of millions of years.
+  </p>
+  
+  <div class="editorial-list">
+    <div class="editorial-row">
+      <div class="row-meta">FOCUS 01</div>
+      <div class="row-content">
+        <h3>Mapping Disc Survival</h3>
+        <p>While most discs dissipate within 10 million years, my work involves conducting comprehensive blind surveys of young stellar clusters in the solar neighborhood. By tracking these populations across extended timeframes (up to 100 Myr), I identify and map the final evolutionary stages of long-lived discs that defy standard dissipation timelines.</p>
+      </div>
+    </div>
+
+    <div class="editorial-row">
+      <div class="row-meta">FOCUS 02</div>
+      <div class="row-content">
+        <h3>Dynamic Variability in Older Discs</h3>
+        <p>Using mid-infrared data from NEOWISE, I track how the structural profiles of these old disc systems change over time. Investigating this dynamic variability provides critical clues about active processes operating in the disc, such as shifting structural warps or the presence of newly formed, embedded planetesimals moving through the dust.</p>
+      </div>
+    </div>
+
+    <div class="editorial-row">
+      <div class="row-meta">FOCUS 03</div>
+      <div class="row-content">
+        <h3>3-D Modelling of long lived "Peter Pan" discs</h3>
+        <p>Using MCFOST, I model these rare discs to get insight about their three-dimensional structure which might explain their longevity. I make use of optical and infrared observations to constrain the physical properties of these systems.</p>
+      </div>
+    </div>
+
+ <div class="publications-section">
+    <h2 class="section-subtitle">Publications</h2>
+    <ul class="pub-list">
+      
+      <li class="pub-item">
+        <div class="pub-year">2025</div>
+        <div class="pub-content">
+          <div class="pub-title">
+             <a href="https://doi.org/10.1093/mnras/staf1089" target="_blank" class="pub-link">
+                Protoplanetary disc survival time-scales: a blind survey of young clusters up to 100 Myr in the solar vicinity
+          <div class="pub-authors">G. M. Ben, J. Jose, J. Hernández</div>
+          <div class="pub-journal">Monthly Notices of the Royal Astronomical Society</div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+</div>
+  
+
+
+
+<script src="js/disc-simulation.js"></script>
+<script src="js/cursor.js"></script>
+<script type="module" src="js/publications.js"></script>
+</body>
+</html>

@@ -3,639 +3,331 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gregory Mathews Ben · Astrophysics</title>
+<title>Gregory Mathews Ben · Astrophysics &amp; Observations</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* Base setup to allow smooth background scrolling controls */
+  body { padding: 0; margin: 0; position: relative; }
 
-  :root {
-    --gold: #c8a96e;
-    --gold-light: #e2c99a;
-    --gold-dim: rgba(200,169,110,0.18);
-    --white: #f5f0e8;
-    --muted: rgba(220,210,195,0.65);
-    --bg-space: #00000f;
-    --bg-earth: #0a0d16;
-    --border: rgba(200,169,110,0.15);
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-body: 'EB Garamond', Georgia, serif;
-    --font-mono: 'DM Mono', monospace;
-    --transition-speed: 0.8s ease;
+  /* FIXED BACKGROUND ENGINE: Stays anchored across all vertical scroll coordinates */
+  #home-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1; /* Behind all text elements */
+    pointer-events: none;
+  }
+  #disc-canvas { width: 100%; height: 100%; display: block; }
+
+  /* ── PERSISTENT SHIELD OVERLAY ── */
+  /* This creates a clean gradient mask that deepens and softens the space lines 
+     as you head down toward your reading content, maintaining clean readability */
+  /* ── PERSISTENT SHIELD OVERLAY ── */
+  .scroll-fade-overlay {
+    position: absolute;
+    top: 100vh; 
+    left: 0;
+    width: 100%;
+    height: calc(100% - 100vh); 
+    /* Slightly lightened the dark color values to let the stars pop through more */
+    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,15,0.2) 15%, rgba(0,0,15,0.6) 60%, rgba(0,0,15,0.8) 100%);
+    
+    /* FIXED: Blurness reduced down to 30% intensity */
+    backdrop-filter: blur(1.2px); 
+    -webkit-backdrop-filter: blur(1.2px);
+    
+    z-index: 2;
+    pointer-events: none;
   }
 
-  html { scroll-behavior: smooth; }
+  /* Main content wrappers sitting safely elevated on top of background logic */
+  main { max-width: 1000px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 3; }
 
-  body {
-    background: var(--bg-space);
-    color: var(--white);
-    font-family: var(--font-body);
-    font-size: 18px;
-    line-height: 1.75;
-    transition: background-color var(--transition-speed);
-    cursor:none;
-  }
-  #cursor {
-    position: fixed; top: 0; left: 0; width: 10px; height: 10px;
-    background: var(--gold); border-radius: 50%; pointer-events: none;
-    z-index: 9999; transform: translate(-50%,-50%);
-    transition: width 0.15s, height 0.15s, background 0.15s;
-    mix-blend-mode: normal;
-  }
-  #cursor-ring {
-    position: fixed; top: 0; left: 0; width: 36px; height: 36px;
-    border: 1px solid rgba(200,169,110,0.4); border-radius: 50%;
-    pointer-events: none; z-index: 9998; transform: translate(-50%,-50%);
-    transition: transform 0.12s ease, width 0.2s, height 0.2s;
-  }
-  body.terrestrial-mode { background: var(--bg-earth); }
- 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.4rem 3.5rem;
-    background: linear-gradient(to bottom, rgba(0,0,15,0.85) 0%, transparent 100%);
-    backdrop-filter: blur(2px);
-  }
-  .nav-logo {
-    font-family: var(--font-display); font-size: 1.1rem;
-    color: var(--gold); letter-spacing: 0.08em; font-weight: 600; text-decoration: none;
-  }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a {
-    font-family: var(--font-mono); font-size: 0.7rem; font-weight: 300;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: rgba(220,210,195,0.6); text-decoration: none; transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--gold); }
-
-  /* ── HERO SECTION FIXED (Ensuring correct layering over canvas) ── */
   #hero {
     position: relative; width: 100%; height: 100vh;
     display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
+    padding-top: 5rem;
   }
-  #disc-canvas {
-    position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1;
-  }
+  
   .hero-container {
-    position: relative; z-index: 2; display: grid;
-    grid-template-columns: 1.25fr 1fr; gap: 4rem;
-    max-width: 1000px; width: 100%; align-items: center; padding: 0 2rem;
+    position: relative; z-index: 4; display: grid; grid-template-columns: 1.25fr 1fr; gap: 4rem; width: 100%; align-items: center;
   }
   .hero-text-side { text-align: left; pointer-events: none; }
-  .hero-label {
-    font-family: var(--font-mono); font-size: 0.68rem; font-weight: 300;
-    letter-spacing: 0.25em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 1rem; opacity: 0; animation: fadeUp 1s 0.3s forwards;
-  }
-  .hero-name {
-    font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 300; line-height: 1.1; color: var(--white);
-    text-shadow: 0 0 60px rgba(0,0,0,1);
-    opacity: 0; animation: fadeUp 1s 0.55s forwards;
-  }
-  .hero-welcome {
-    font-size: 1.1rem; color: var(--muted); margin-top: 1.5rem; max-width: 540px;
-    text-shadow: 0 0 30px rgba(0,0,0,1), 0 2px 8px rgba(0,0,0,1);
-    opacity: 0; animation: fadeUp 1s 0.8s forwards; line-height: 1.7;
-  }
+  .hero-label { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .hero-name { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; line-height: 1.1; text-shadow: 0 0 60px rgba(0,0,0,1); }
+  .hero-welcome { font-size: 1.1rem; color: var(--muted); margin-top: 1.5rem; line-height: 1.7; text-shadow: 0 0 30px rgba(0,0,0,1); }
   .hero-welcome span { color: var(--gold); font-style: italic; }
 
-  /* Full True-Color Portrait Frame Layout */
-  .hero-portrait-side {
-    opacity: 0; animation: fadeUp 1s 1.0s forwards; display: flex; justify-content: center; z-index: 3;
+  .hero-portrait-side { display: flex; justify-content: center; z-index: 5; }
+  .portrait-frame { position: relative; width: 280px; height: 360px; border: 1px solid var(--border); background: #000; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+  .portrait-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+  .portrait-frame:hover img { transform: scale(1.02); }
+
+  /* Lower content panels look exceptionally sharp floating over the dynamic background overlay */
+  /* ── PORTAL CARDS SIDE-BY-SIDE GRID ARCHITECTURE ── */
+  #portals { 
+    padding: 4rem 0 7rem 0; 
+    border-bottom: 1px solid var(--border); 
   }
-  .portrait-frame {
-    position: relative; width: 280px; height: 360px;
-    border: 1px solid var(--border); background: #000; overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  
+  /* FIXED: Explicitly enforces a balanced side-by-side grid distribution layout */
+  .portal-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; /* Spreads cards side-by-side split evenly */
+    gap: 2rem; 
+    width: 100%;
   }
-  .portrait-frame img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-  .portrait-frame:hover img {
-    transform: scale(1.02);
+  
+  .portal-card, 
+  .portal-card:visited, 
+  .portal-card:active, 
+  .portal-card:focus {
+    position: relative;
+    overflow: hidden; 
+    background: rgba(0, 0, 15, 0.5); 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    padding: 3.5rem 2.5rem; 
+    text-decoration: none; 
+    display: block;
+    z-index: 1;
+    transition: border-color 0.4s ease, background 0.4s ease;
   }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .portal-card:hover {
+    border-color: rgba(200, 169, 110, 0.4);
+    background: rgba(200, 169, 110, 0.06);
   }
 
-  /* ── SECTIONS ── */
-  section {
-    max-width: 900px; margin: 0 auto; padding: 7rem 2.5rem; border-bottom: 1px solid var(--border);
-    position: relative; z-index: 2;
+  /* CRUCIAL TEXT COLOR OVERRIDES (Fixes Browser Purple Tint Issue) */
+  .portal-card .portal-meta,
+  .portal-card:visited .portal-meta {
+    font-family: var(--font-mono); 
+    font-size: 0.65rem; 
+    color: var(--gold) !important; 
+    letter-spacing: 0.2em; 
+    text-transform: uppercase; 
+    margin-bottom: 0.8rem;
+    position: relative;
+    z-index: 3;
   }
-  section:last-of-type { border-bottom: none; }
 
-  .sec-label {
-    font-family: var(--font-mono); font-size: 0.65rem; font-weight: 300;
-    letter-spacing: 0.25em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 1.5rem; display: block;
+  .portal-card h2,
+  .portal-card:visited h2 {
+    font-family: var(--font-display); 
+    font-size: 1.8rem; 
+    font-weight: 300; 
+    color: var(--white) !important; 
+    margin-bottom: 0.8rem;
+    position: relative;
+    z-index: 3;
+    transition: color 0.3s ease;
   }
-  .sec-title {
-    font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 300; color: var(--white); line-height: 1.1; margin-bottom: 2.5rem;
+  .portal-card:hover h2 {
+    color: var(--gold-light) !important; 
   }
-  .sec-intro { color: var(--muted); font-size: 1.1rem; max-width: 700px; margin-bottom: 4rem; }
 
-  /* ── EDITORIAL LAYOUT ── */
-  .editorial-list { display: flex; flex-direction: column; }
-  .editorial-row {
-    display: grid; grid-template-columns: 180px 1fr; gap: 2rem;
-    padding: 3rem 0; border-top: 1px solid var(--border);
+  .portal-card p,
+  .portal-card:visited p {
+    font-size: 0.95rem; 
+    color: var(--muted) !important; 
+    line-height: 1.6;
+    position: relative;
+    z-index: 3;
   }
-  .row-meta {
-    font-family: var(--font-mono); font-size: 0.8rem; color: var(--gold);
-    letter-spacing: 0.1em;
-  }
-  .row-content h3 {
-    font-family: var(--font-display); font-size: 1.8rem; font-weight: 400;
-    color: var(--white); margin-bottom: 1rem; line-height: 1.2;
-  }
-  .row-content p { font-size: 0.95rem; color: var(--muted); line-height: 1.7; }
 
-  /* ── PHOTOGRAPHY PORTALS ── */
-  .travel-grid { display: flex; flex-direction: column; gap: 5.5rem; margin-top: 2rem; }
-  .travel-item { display: grid; grid-template-columns: 1.2fr 1fr; gap: 3.5rem; align-items: center; }
-  .travel-item:nth-child(even) { grid-template-columns: 1fr 1.2fr; }
-  .travel-item:nth-child(even) .travel-img-wrapper { grid-column: 2; }
-  .travel-item:nth-child(even) .travel-info { grid-column: 1; grid-row: 1; }
+  /* VECTOR WATERMARK ANIMATION SYSTEM CONTAINER */
+  .card-svg-holder {
+    position: absolute;
+    right: -15px;
+    bottom: -20px;
+    width: 220px;
+    height: 220px;
+    z-index: 2;
+    opacity: 0; 
+    transform: scale(0.9) translateY(10px);
+    filter: drop-shadow(0 0 15px rgba(200, 169, 110, 0.25));
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none; 
+  }
+  .card-svg-holder svg { width: 100%; height: 100%; }
 
-  .travel-img-wrapper {
-    position: relative; overflow: hidden; border: 1px solid var(--border);
-    border-radius: 2px; background: #000; display: block;
+  .portal-card:hover .card-svg-holder {
+    opacity: 1; 
+    transform: scale(1) translateY(0);
   }
-  .travel-img-wrapper img {
-    width: 100%; display: block; height: 360px; object-fit: cover;
-    filter: grayscale(40%) sepia(15%) brightness(0.75);
-    transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), filter 0.7s ease;
-  }
-  .travel-img-wrapper:hover img {
-    filter: grayscale(0%) sepia(0%) brightness(1); transform: scale(1.02);
-  }
-  .meta-coords {
-    font-family: var(--font-mono); font-size: 0.65rem; color: var(--gold);
-    letter-spacing: 0.15em; margin-bottom: 0.6rem;
-  }
-  .travel-notes {
-    font-size: 0.95rem; color: var(--muted); border-left: 1px solid var(--gold-dim);
-    padding-left: 1rem; margin-top: 1.2rem; font-style: italic; line-height: 1.6;
-  }
-  .explore-link {
-    display: inline-block; margin-top: 1.2rem; font-family: var(--font-mono);
-    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
-    color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(200,169,110,0.3);
-    padding-bottom: 2px; transition: color 0.2s, border-color 0.2s;
-  }
-  .explore-link:hover { color: var(--white); border-color: var(--white); }
 
-  /* ── CONTACT ── */
-  .contact-hero { padding: 2rem 0; }
-  .email-massive {
-    font-family: var(--font-display); font-size: clamp(1.8rem, 4.5vw, 3.5rem);
-    color: var(--white); text-decoration: none; border-bottom: 2px solid var(--gold-dim);
-    display: inline-block; margin: 1rem 0 3rem 0; transition: color 0.3s, border-color 0.3s;
-    line-height: 1.2;
+  /* Responsive breakpoint configuration handles small screen constraints gracefully */
+  @media (max-width: 860px) {
+    .portal-grid { 
+      grid-template-columns: 1fr; /* Stacks vertically only on mobile viewports */
+      gap: 1.5rem; 
+    }
+    .portal-card { padding: 2.5rem 2rem; }
   }
+  #contact { padding: 7rem 0 4rem 0; }
+  .sec-label { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: block; }
+  .contact-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; line-height: 1.1; }
+  .email-massive { font-family: var(--font-display); font-size: clamp(1.8rem, 4.5vw, 3.5rem); color: var(--white); text-decoration: none; border-bottom: 2px solid var(--gold-dim); display: inline-block; margin: 1rem 0 3rem 0; transition: color 0.3s, border-color 0.3s; }
   .email-massive:hover { color: var(--gold); border-color: var(--gold); }
   
-  .contact-links-inline {
-    display: flex; gap: 2rem; font-family: var(--font-mono); font-size: 0.75rem;
-    letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
-  }
+  .contact-links-inline { display: flex; gap: 2rem; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
   .contact-links-inline a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
   .contact-links-inline a:hover { color: var(--gold); }
 
-  footer {
-    text-align: center; padding: 4rem 2rem;
-    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.14em;
-    color: rgba(200,169,110,0.25); text-transform: uppercase;
-  }
+  footer { text-align: center; padding: 4rem 0; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.14em; color: rgba(200,169,110,0.25); text-transform: uppercase; }
 
   @media (max-width: 860px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { gap: 1.2rem; }
-    #hero { padding-top: 7rem; height: auto; min-height: auto; }
-    .hero-container { grid-template-columns: 1fr; gap: 2.5rem; }
+    #hero { height: auto; min-height: 90vh; padding-top: 7rem; }
+    .hero-container { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
     .hero-text-side { text-align: center; }
-    .hero-welcome { margin-left: auto; margin-right: auto; }
     .portrait-frame { width: 240px; height: 310px; }
-    section { padding: 5rem 1.5rem; }
-    .editorial-row { grid-template-columns: 1fr; gap: 0.5rem; padding: 2.5rem 0; }
-    .row-meta { margin-bottom: 0.5rem; }
-    .travel-item, .travel-item:nth-child(even) { grid-template-columns: 1fr; gap: 1.5rem; }
-    .travel-item:nth-child(even) .travel-img-wrapper { grid-column: auto; }
-    .travel-img-wrapper img { height: 250px; }
-    .contact-links-inline { flex-direction: column; gap: 1rem; }
+    .portal-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .portal-card { padding: 2rem; }
+    .scroll-fade-overlay { top: 90vh; height: calc(100% - 90vh); }
   }
 </style>
 </head>
 <body>
+
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
+
 <nav>
-  <a class="nav-logo" href="#hero">GMB</a>
+  <a class="nav-logo" href="index.html">GMB</a>
   <ul class="nav-links">
-    <li><a href="#research">Research</a></li>
-    <li><a href="#publications">Publications</a></li>
-    <li><a href="#terrestrial">Field Notes</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="travel.html">Travel</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
-<section id="hero" style="max-width:100%; border:none; padding:0;">
+<div id="home-background">
   <canvas id="disc-canvas"></canvas>
-  <div class="hero-container">
+</div>
+
+<div class="scroll-fade-overlay"></div>
+
+<main>
+  <section id="hero">
+    <div class="hero-container">
+      <div class="hero-text-side">
+        <div class="hero-label">Aspiring Astrophysicist · Travel Enthusiast</div>
+        <h1 class="hero-name">Gregory Mathews Ben</h1>
+        <p class="hero-welcome">
+          Hi there. I am a Ph.D. student in the Star Formation Group at <span>IISER Tirupati</span>, specializing in the evolution of protoplanetary discs. Beyond research, I love to travel, capture landscapes through photography, and watch movies. This is my personal space on the web, where you can find my academic work alongside a few of my travel journals.
+        </p>
+      </div>
+      <div class="hero-portrait-side">
+        <div class="portrait-frame">
+          <img src="images/greg.jpg" alt="Gregory Mathews Ben Portrait">
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
+<section id="portals">
+  <div class="portal-grid">
     
-    <div class="hero-text-side">
-      <div class="hero-label">Astrophysics · Star &amp; Planet Formation</div>
-      <h1 class="hero-name">Gregory Mathews Ben</h1>
-      <p class="hero-welcome">
-        Hi there. I am a Ph.D. student at <span>Star Formation Group, Department of Physics, IISER Tirupati</span>, specializing in the evolutionary architecture of star and planet formation. My research targets the long-term physics of Peter Pan discs. Outside of computational data tracking, I explore geography through a lens, documenting shifts in light across landscapes.
-      </p>
-    </div>
-
-    <div class="hero-portrait-side">
-      <div class="portrait-frame">
-        <img src="greg.jpg" alt="Gregory Mathews Ben Portrait">
+    <a href="research.html" class="portal-card">
+      <div class="portal-meta">01 // Primary Focus</div>
+      <h2>Research portfolio</h2>
+      <p>Explore computational modeling, multi-wavelength disk lifetimes, and magnetospheric accretion simulation frameworks.</p>
+      
+      <div class="card-svg-holder">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="starCore" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+              <stop offset="40%" stop-color="var(--gold-light)" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="var(--bg-space)" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          
+          <circle cx="90" cy="110" r="25" fill="url(#starCore)" />
+          <circle cx="90" cy="110" r="3" fill="#ffffff" />
+          
+          <ellipse cx="90" cy="110" rx="45" ry="16" stroke="var(--gold)" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+          <ellipse cx="90" cy="110" rx="70" ry="24" stroke="var(--gold-light)" stroke-width="1.2" opacity="0.25"/>
+          <ellipse cx="90" cy="110" rx="95" ry="32" stroke="var(--gold)" stroke-width="0.8" stroke-dasharray="14 8" opacity="0.35"/>
+          <ellipse cx="90" cy="110" rx="120" ry="40" stroke="var(--gold-light)" stroke-width="0.6" opacity="0.15"/>
+          
+          <g transform="translate(145, 55)">
+            <path d="M-20 -10 C-15 15 15 15 20 -10" stroke="var(--gold-light)" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M-15 -3 L0 12 L15 -3 M0 12 L0 4" stroke="var(--gold)" stroke-width="0.8" opacity="0.4"/>
+            <path d="M0 12 L0 24 M-8 24 L8 24" stroke="var(--gold)" stroke-width="1.2" opacity="0.4"/>
+            <path d="M0 4 L-55 55" stroke="var(--gold-light)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35"/>
+          </g>
+          
+          <path d="M15 110 L30 110 M90 25 L90 40" stroke="var(--gold)" stroke-width="0.5" opacity="0.3"/>
+          <path d="M115 130 L125 125 L135 132 L145 122 L155 135" stroke="var(--gold-light)" stroke-width="0.8" opacity="0.25"/> </svg>
       </div>
-    </div>
+    </a>
+
+    <a href="travel.html" class="portal-card">
+      <div class="portal-meta">02 // Terrestrial Optics</div>
+      <h2>Field Notes &amp; Imagery</h2>
+      <p>A minimalist collection tracking landscape photography profiles, light behaviors, and journals across earth coordinates.</p>
+      
+      <div class="card-svg-holder">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="76" stroke="var(--gold)" stroke-width="0.8" opacity="0.2"/>
+          <circle cx="100" cy="100" r="70" stroke="var(--gold-light)" stroke-width="1.5" opacity="0.35"/>
+          
+          <path d="M100 30 L135 55 M170 100 L135 135 M100 170 L65 145 M30 100 L65 65" stroke="var(--gold)" stroke-width="0.8" opacity="0.25"/>
+          
+          <path d="M45 135 L80 95 L120 130 L150 85 L175 120" stroke="var(--gold)" stroke-width="1" stroke-linejoin="round" opacity="0.3"/>
+          <path d="M60 145 L105 105 L150 145" stroke="var(--gold-light)" stroke-width="1.5" stroke-linejoin="round" opacity="0.45"/>
+          <path d="M105 115 Q101 128 103 136 T102 145" stroke="var(--white)" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+          
+          <path d="M25 135 Q60 55 155 45" stroke="var(--gold-light)" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+          
+          <g transform="translate(155, 45) rotate(-5)">
+            <path d="M0 0 L-12 -2 L-16 -12 L-19 -11 L-16 -1 L-26 -2 L-28 -6 L-30 -6 L-29 0 L-30 6 L-28 6 L-26 2 L-16 1 L-19 11 L-16 12 L-12 2 L0 0" fill="var(--gold-light)" opacity="0.6"/>
+          </g>
+          
+          <path d="M100 12 L100 24 M100 176 L100 188 M12 100 L24 100 M176 100 L188 100" stroke="var(--gold)" stroke-width="0.8" opacity="0.3"/>
+        </svg>
+      </div>
+    </a>
 
   </div>
 </section>
 
-<section id="research">
-  <span class="sec-label">01 · Focus Areas</span>
-  <h2 class="sec-title">The longevity of primordial reservoirs</h2>
-  <p class="sec-intro">
-    My work centers on understanding Peter Pan discs—an enigmatic class of primordial protoplanetary discs around low-mass stars that survive for over 20 million years, vastly outliving typical dissipation timescales.
-  </p>
-
-  <div class="editorial-list">
-    <div class="editorial-row">
-      <div class="row-meta">01 // Lifetimes</div>
-      <div class="row-content">
-        <h3>Peter Pan Disc Timelines</h3>
-        <p>Investigating mass dispersal inhibitors that extend low-mass stellar disc timelines beyond 20 Myr. By tracking photoevaporation rates and shielding parameters, I model how these systems maintain their planet-building environments far longer than standard T Tauri systems.</p>
+  <section id="contact">
+    <span class="sec-label">03 · Inquiries</span>
+    <div class="contact-hero">
+      <h2 class="contact-title">Let's collaborate.</h2>
+      <a href="mailto:gregory@labs.iisertirupati.ac.in" class="email-massive">gregory@labs.iisertirupati.ac.in</a>
+      <div class="contact-links-inline">
+        <span>/</span>
+        <a href="https://www.iisertirupati.ac.in/" target="_blank">IISER Tirupati</a>
+        <span>/</span>
+        <a href="https://orcid.org/0009-0005-5716-3956" target="_blank">ORCID</a>
+        <span>/</span>
+        <a href="https://www.linkedin.com/in/gregorygmb6626" target="_blank">LinkedIn</a>
+        <span>/</span>
+        <a href="cv.pdf" target="_blank">CV (PDF)</a>
       </div>
     </div>
+  </section>
 
-    <div class="editorial-row">
-      <div class="row-meta">02 // Kinematics</div>
-      <div class="row-content">
-        <h3>Accretion Mechanics</h3>
-        <p>Quantifying inward mass flux rates and global gas distribution balances in older primordial architectures. I analyze 3D magnetospheric accretion channels to understand how material bridges the inner gap and sustains the central star.</p>
-      </div>
-    </div>
+  <footer>
+    &copy; 2026 Gregory Mathews Ben 
+  </footer>
+</main>
 
-    <div class="editorial-row">
-      <div class="row-meta">03 // Structure</div>
-      <div class="row-content">
-        <h3>Dust &amp; Gas Evolution</h3>
-        <p>Simulating structural radial profiles, tracking how sub-structures (rings and gaps) form via planet-disc interactions, and calculating optical opacity transformations across continuous evolutionary steps.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="publications">
-  <span class="sec-label">02 · Literature</span>
-  <h2 class="sec-title">Selected Publications</h2>
-  
-  <div class="editorial-list">
-    <div class="editorial-row">
-      <div class="row-meta">2025</div>
-      <div class="row-content">
-        <h3>Modeling Accretion Profiles and Lifetimes in Low-Mass M-Dwarf Primordial Reservoirs</h3>
-        <p style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--gold); text-transform: uppercase;">The Astrophysical Journal · Authors et al.</p>
-      </div>
-    </div>
-    <div class="editorial-row">
-      <div class="row-meta">2023</div>
-      <div class="row-content">
-        <h3>Opacity Evolutions and Radial Drift Profiles Within Long-Lived Protoplanetary Discs</h3>
-        <p style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--gold); text-transform: uppercase;">Astronomy &amp; Astrophysics · Authors et al.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="terrestrial">
-  <span class="sec-label">03 · Terrestrial Observations</span>
-  <h2 class="sec-title">Capturing light across earthly coordinates</h2>
-  <p class="sec-intro">
-    When looking away from computational simulations of stellar physics, I use an optical camera lens to study dynamic patterns closer to home. 
-  </p>
-
-  <div class="travel-grid">
-    <div class="travel-item">
-      <a href="spiti.html" class="travel-img-wrapper">
-        <img src="images/spiti_cover.webp" alt="Spiti Valley Expedition" loading="lazy">
-      </a>
-      <div class="travel-info">
-        <div class="meta-coords">32.2461° N, 78.0349° E · TRANS-HIMALAYA</div>
-        <h3 style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--white); margin-bottom: 0.5rem;">Manali &amp; Spiti</h3>
-        <p style="font-size: 0.95rem; color: var(--muted); line-height: 1.6;">
-          Arid, cold mountain topologies where thin atmospheres generate crisp visibility baselines, highlighting intense geographical structures.
-        </p>
-        <div class="travel-notes">
-          "Zero urban lighting footprints. Clean atmospheric windows mirror excellent optical baseline parameters."
-        </div>
-        <a href="spiti.html" class="explore-link">Explore Gallery &amp; Journal</a>
-      </div>
-    </div>
-
-    <div class="travel-item">
-      <a href="meghalaya.html" class="travel-img-wrapper">
-        <img src="images/meghalaya_cover.webp" alt="Meghalaya Landscape" loading="lazy">
-      </a>
-      <div class="travel-info">
-        <div class="meta-coords">25.5788° N, 91.8933° E · MEGHALAYA VALLEY</div>
-        <h3 style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--white); margin-bottom: 0.5rem;">The Abode of Clouds</h3>
-        <p style="font-size: 0.95rem; color: var(--muted); line-height: 1.6;">
-          High-humidity geographic canyons where continuous cloud formations shape shifting light profiles across forested structures.
-        </p>
-        <div class="travel-notes">
-          "Tracking fluid mist flows through steep terrain. Light undergoes dense scattering mechanics here."
-        </div>
-        <a href="meghalaya.html" class="explore-link">Explore Gallery &amp; Journal</a>
-      </div>
-    </div>
-
-    <div class="travel-item">
-      <a href="nainital.html" class="travel-img-wrapper">
-        <img src="images/nainital_cover.webp" alt="Nainital Lakes" loading="lazy">
-      </a>
-      <div class="travel-info">
-        <div class="meta-coords">29.3919° N, 79.4542° E · KUMAON RANGE</div>
-        <h3 style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--white); margin-bottom: 0.5rem;">Nainital</h3>
-        <p style="font-size: 0.95rem; color: var(--muted); line-height: 1.6;">
-          Slowing down down near reflective highland lakes. Long exposures map out soft twilight shifts and quiet water geometries.
-        </p>
-        <div class="travel-notes">
-          "Calm lake boundaries functioning precisely as a collective mirror framework during blue hour transitions."
-        </div>
-        <a href="nainital.html" class="explore-link">Explore Gallery &amp; Journal</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="contact">
-  <span class="sec-label">04 · Inquiries</span>
-  <div class="contact-hero">
-    <h2 class="sec-title" style="margin-bottom: 0;">Let's collaborate.</h2>
-    <a href="mailto:yourname@iisertpr.ac.in" class="email-massive">yourname@iisertpr.ac.in</a>
-    
-    <div class="contact-links-inline">
-      <span>IISER Tirupati, India</span>
-      <span>/</span>
-      <a href="https://orcid.org/0000-0000-0000-0000" target="_blank">ORCID</a>
-      <span>/</span>
-      <a href="https://github.com/yourusername" target="_blank">GitHub</a>
-      <span>/</span>
-      <a href="cv.pdf" target="_blank">Download CV (PDF)</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  &copy; 2026 Gregory Mathews Ben · Engineered with HTML &amp; 3D Gaseous Flow Canvas Physics
-</footer>
-
-<script>
-(function() {
-  const canvas = document.getElementById('disc-canvas');
-  const ctx    = canvas.getContext('2d');
-  const hero   = document.getElementById('hero');
-
-  let W, H, cx, cy;
-  let targetTX = 0, targetTY = 0, tiltX = 0, tiltY = 0;
-  let t = 0;
-
-  function resize() {
-    W = canvas.width  = hero.clientWidth;
-    H = canvas.height = hero.clientHeight;
-    cx = W / 2; cy = H / 2;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  document.addEventListener('mousemove', e => {
-    targetTX = (e.clientX / window.innerWidth  - 0.5) * 0.15;
-    targetTY = (e.clientY / window.innerHeight - 0.5) * 0.10;
-  });
-
-  const bgStars = [];
-  for (let i = 0; i < 180; i++) {
-    bgStars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.1 + 0.2, ph: Math.random() * Math.PI * 2, sp: 0.4 });
-  }
-
-  /* Substructured Dust Discs with distinct gaps [cite: 135] */
-  const RINGS = [
-    { r: 100, spread: 8,  n: 350, spd: 0.0014, color: (p) => `rgba(235, 192, 125, ${0.65 * p.br})` }, 
-    { r: 115, spread: 5,  n: 250, spd: 0.0012, color: (p) => `rgba(225, 178, 110, ${0.45 * p.br})` }, 
-    { r: 175, spread: 5,  n: 400, spd: 0.0009, color: (p) => `rgba(205, 162, 100, ${0.75 * p.br})` }, 
-    { r: 190, spread: 6,  n: 300, spd: 0.0008, color: (p) => `rgba(185, 142,  90, ${0.40 * p.br})` },
-    { r: 250, spread: 12, n: 450, spd: 0.0006, color: (p) => `rgba(155, 122,  80, ${0.30 * p.br})` }
-  ];
-
-  RINGS.forEach(ring => {
-    ring.pts = [];
-    for (let i = 0; i < ring.n; i++) {
-      ring.pts.push({ 
-        angle: Math.random() * Math.PI * 2, 
-        dR: (Math.random() - 0.5) * ring.spread, 
-        sz: Math.random() * 1.2 + 0.4, 
-        br: 0.4 + Math.random() * 0.6 
-      });
-    }
-  });
-
-  /* ── SYMMETRIC ACCRETION REFACTOR (4 channels spaced perfectly by 90 degrees) ── */
-  const STREAMERS = [];
-  const totalStreamers = 5; 
-  for (let i = 0; i < totalStreamers; i++) {
-    STREAMERS.push({
-      // Spacing angles perfectly by 90 degrees (i * Math.PI / 2) to distribute all around the star sides
-      angleOffset: i * (Math.PI / 2),
-      speed: 0.007,
-      hMax: 45 + Math.random() * 15,
-      // Alternate hemispheres (i % 2 === 0 ? Up : Down) to maintain dynamic architectural symmetry
-      zDir: i % 2 === 0 ? 1 : -1, 
-      thick: 2.5
-    });
-  }
-
-  function project3D(angle, r, z) {
-    const inc = 0.33 + tiltY * 0.45;
-    const x = cx + Math.cos(angle) * r + tiltX * r * 0.25;
-    const y = cy + Math.sin(angle) * r * inc - z; 
-    const depth = Math.sin(angle) * r + (z * 0.5); 
-    return { x, y, depth };
-  }
-
-  function draw() {
-    t += 0.012;
-    tiltX += (targetTX - tiltX) * 0.04;
-    tiltY += (targetTY - tiltY) * 0.04;
-
-    ctx.fillStyle = '#00000f';
-    ctx.fillRect(0, 0, W, H);
-
-    bgStars.forEach(s => {
-      ctx.beginPath();
-      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(235, 240, 255, ${0.2 + Math.sin(t * s.sp + s.ph) * 0.15})`;
-      ctx.fill();
-    });
-
-    let renderList = [];
-    renderList.push({ type: 'star', depth: 0 });
-
-    RINGS.forEach(ring => {
-      ring.pts.forEach(p => {
-        p.angle += ring.spd;
-        const proj = project3D(p.angle, ring.r + p.dR, 0);
-        renderList.push({ 
-          type: 'disc', x: proj.x, y: proj.y, depth: proj.depth, 
-          sz: p.sz, color: ring.color(p) 
-        });
-      });
-    });
-
-    /* Render symmetric geometric gas path arrays [cite: 134] */
-    STREAMERS.forEach(str => {
-      let segmentPoints = [];
-      let avgDepth = 0;
-      const steps = 16; 
-
-      for (let j = 0; j <= steps; j++) {
-        let stepProg = j / steps;
-        let r = 100 * (1 - Math.pow(stepProg, 1.6)) + 6;
-        let z = str.hMax * Math.sin(stepProg * Math.PI) * str.zDir;
-        
-        // Combine continuous background orbital rotation with structural offset
-        let angle = (t * 0.6) + str.angleOffset + (stepProg * 1.5 * str.zDir);
-        
-        let proj = project3D(angle, r, z);
-        segmentPoints.push(proj);
-        avgDepth += proj.depth;
-      }
-      avgDepth /= (steps + 1);
-
-      renderList.push({
-        type: 'gaseous_stream',
-        points: segmentPoints,
-        depth: avgDepth,
-        thick: str.thick
-      });
-    });
-
-    renderList.sort((a, b) => a.depth - b.depth);
-
-    renderList.forEach(item => {
-      if (item.type === 'star') {
-        let glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 60);
-        glow.addColorStop(0, 'rgba(255, 232, 190, 0.45)');
-        glow.addColorStop(0.4, 'rgba(255, 155, 75, 0.12)');
-        glow.addColorStop(1, 'rgba(255, 80, 20, 0)');
-        ctx.beginPath(); ctx.arc(cx, cy, 60, 0, Math.PI * 2); ctx.fillStyle = glow; ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
-        ctx.fillStyle = '#fff6eb'; 
-        ctx.fill();
-      } else if (item.type === 'gaseous_stream') {
-        if (item.points.length < 2) return;
-        
-        ctx.beginPath();
-        ctx.moveTo(item.points[0].x, item.points[0].y);
-        for (let k = 1; k < item.points.length; k++) {
-          ctx.lineTo(item.points[k].x, item.points[k].y);
-        }
-        
-        let grad = ctx.createLinearGradient(
-          item.points[0].x, item.points[0].y, 
-          item.points[item.points.length-1].x, item.points[item.points.length-1].y
-        );
-        grad.addColorStop(0, 'rgba(200, 140, 70, 0.02)'); 
-        grad.addColorStop(0.4, 'rgba(235, 180, 110, 0.35)'); 
-        grad.addColorStop(1, 'rgba(255, 240, 210, 0.85)'); 
-        
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = item.thick;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.stroke();
-      } else {
-        ctx.fillStyle = item.color;
-        ctx.fillRect(item.x, item.y, item.sz, item.sz);
-      }
-    });
-
-    requestAnimationFrame(draw);
-  }
-  
-  draw();
-})();
-
-/* ── SCROLL GRADIENT OBSERVER ── */
-const travelSection = document.getElementById('terrestrial');
-if (travelSection && 'IntersectionObserver' in window) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        document.body.classList.add('terrestrial-mode');
-      } else {
-        document.body.classList.remove('terrestrial-mode');
-      }
-    });
-  }, { threshold: 0.12 });
-  observer.observe(travelSection);
-}
-</script>
-<script>
-(function() {
-  const dot  = document.getElementById('cursor');
-  const ring = document.getElementById('cursor-ring');
-  let rx = 0, ry = 0, mx = 0, my = 0;
-
-  // Continuously listen to mouse coordinates
-  document.addEventListener('mousemove', e => { 
-    mx = e.clientX; 
-    my = e.clientY; 
-  });
-
-  // Smooth frame loop calculation
-  function loop() {
-    rx += (mx - rx) * 0.14;
-    ry += (my - ry) * 0.14;
-    dot.style.left  = mx + 'px';
-    dot.style.top   = my + 'px';
-    ring.style.left = rx + 'px';
-    ring.style.top  = ry + 'px';
-    requestAnimationFrame(loop);
-  }
-  loop();
-
-  // Expand cursor on interactive links
-  document.querySelectorAll('a, button, .travel-img-wrapper').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      dot.style.width = '14px'; dot.style.height = '14px';
-      ring.style.width = '50px'; ring.style.height = '50px';
-    });
-    el.addEventListener('mouseleave', () => {
-      dot.style.width = '10px'; dot.style.height = '10px';
-      ring.style.width = '36px'; ring.style.height = '36px';
-    });
-  });
-})();
-</script>
+<script src="js/disc-simulation.js"></script>
+<script src="js/cursor.js"></script>
 </body>
 </html>
