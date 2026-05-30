@@ -130,7 +130,22 @@
     transform: translateY(-4px);
     box-shadow: 0 15px 30px rgba(0,0,0,0.7);
   }
+  .gallery .text-entry-span {
+    grid-column: span 2 !important; /* Spans smoothly across the horizontal display */
+    padding: 1rem 0;
+    column-count: 1; /* Automatically splits text into two side-by-side reading flows */
+    column-gap: 2.5rem; /* Generates a clean gutter channel between column breaks */
+    box-sizing: border-box;
+  }
 
+  .gallery .text-entry-span p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.85;
+    text-shadow: 0 0 15px rgba(0,0,0,1);
+    margin-bottom: 0;
+    text-align: justify; /* Aligns text edges elegantly like a real publication */
+  }
   /* CRUCIAL FIX: Forcing explicit structural spans */
   .gallery-item.landscape-16-9 {
     grid-column: span 2 !important; /* Stretches completely wide on desktop */
@@ -192,6 +207,7 @@
     .gallery { grid-template-columns: 1fr !important; gap: 1.5rem; }
     .gallery-item.landscape-16-9, .gallery-item.portrait-3-4 { grid-column: span 1 !important; }
     .landscape-16-9 .img-box { aspect-ratio: 16 / 10 !important; }
+    .gallery .text-entry-span { column-count: 1; }
   }
 </style>
 </head>
@@ -218,58 +234,56 @@
   <h1>Manali &amp; Spiti Expedition</h1>
   <div class="log-meta">Region: Trans-Himalaya &nbsp;·&nbsp; Elevation: ~3,800 m</div>
 
-  <div class="log-entry">
-    <p>Manali and Spiti valley are located in the Himachal Pradesh district of India. Notably Spiti is one of the highest villages in the world. Our journey started from Manali, seeing the greenery and then transitioning into high altitudes of Spiti. The Manali-Kaza route only opens up in June-September, and we went by HRTC bus. It was a one day journey and we could feel the altitude difference once we reached Spiti.</p>
-    <p>At night, the lack of human infrastructure leaves the sky completely dark, providing views of the cosmos that match the calibration baselines of isolated scientific observatories.</p>
-  </div>
+  
 
   <div class="gallery">
-    
+    <div class="text-entry-span">
+      <p>Manali and Spiti valley are located in the Himachal Pradesh district of India. Notably Spiti is one of the highest villages in the world. Our journey started from Manali, seeing the greenery and then transitioning into high altitudes of Spiti. The Manali-Kaza route only opens up in June-September, and we went by HRTC bus. It was a one day journey and we could feel the altitude difference once we reached Spiti.</p>
+    </div>
     <div class="gallery-item portrait-3-4">
       <div class="img-box">
-        <img src="../images/spiti4.jpg" alt="Near Atal Tunnel.">
+        <img src="../images/spiti/spiti4.jpg" alt="Near Atal Tunnel.">
       </div>
       <div class="photo-caption">View near Atal Tunnel</div>
     </div>
-    
     <div class="gallery-item portrait-3-4">
       <div class="img-box">
-        <img src="../images/spiti8.jpg" alt="Kaza Monastery Landscape">
+        <img src="../images/spiti/spiti8.jpg" alt="Kaza Monastery Landscape">
       </div>
       <div class="photo-caption">Sipping tea after trek at Hamta Pass</div>
     </div>
     
     <div class="gallery-item landscape-16-9">
       <div class="img-box">
-        <img src="../images/spiti7.jpg" alt="Spiti Stargazing Trail">
+        <img src="../images/spiti/spiti7.jpeg" alt="Spiti Stargazing Trail">
       </div>
       <div class="photo-caption">Waterfall near Sissu</div>
     </div>
     
     <div class="gallery-item portrait-3-4">
       <div class="img-box">
-        <img src="../images/spiti6.jpg" alt="Spiti Valley Panorama">
+        <img src="../images/spiti/spiti6.jpg" alt="Spiti Valley Panorama">
       </div>
       <div class="photo-caption">A peak on route Manali - Kaza</div>
     </div>
     
     <div class="gallery-item portrait-3-4">
       <div class="img-box">
-        <img src="../images/spiti3.jpg" alt="Spiti Valley Road">
+        <img src="../images/spiti/spiti3.jpg" alt="Spiti Valley Road">
       </div>
       <div class="photo-caption">Key Monastery</div>
     </div>
 
     <div class="gallery-item portrait-3-4">
       <div class="img-box">
-        <img src="../images/spiti2.jpg" alt="Spiti Landscape Profile">
+        <img src="../images/spiti/spiti2.jpg" alt="Spiti Landscape Profile">
       </div>
       <div class="photo-caption">Chandratal Lake</div>
     </div>
     
     <div class="gallery-item portrait-3-4">
       <div class="img-box">
-        <img src="../images/spiti5.jpg" alt="High Altitude Pass">
+        <img src="../images/spiti/spiti5.jpg" alt="High Altitude Pass">
       </div>
       <div class="photo-caption">Night Sky at Kaza, View from the terrace</div>
     </div>
