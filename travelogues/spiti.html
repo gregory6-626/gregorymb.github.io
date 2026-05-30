@@ -3,46 +3,304 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Field Log: Manali &amp; Spiti</title>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Cormorant+Garamond:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<title>Field Log: Manali &amp; Spiti · Gregory Mathews Ben</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
 <style>
-  body { background: #0a0d16; color: #f5f0e8; font-family: 'EB Garamond', serif; padding: 4rem 2rem; line-height: 1.8; }
-  .wrapper { max-width: 800px; margin: 0 auto; }
-  .back-btn { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: #c8a96e; text-decoration: none; text-transform: uppercase; letter-spacing: 0.15em; display: inline-block; margin-bottom: 3rem; }
-  h1 { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 3rem; margin-bottom: 0.5rem; line-height: 1.1; }
-  .log-meta { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: #c8a96e; letter-spacing: 0.1em; margin-bottom: 3rem; border-bottom: 1px solid rgba(200,169,110,0.15); padding-bottom: 1rem; }
-  .log-entry { font-size: 1.1rem; color: rgba(220,210,195,0.75); margin-bottom: 4rem; }
-  .gallery { display: flex; flex-direction: column; gap: 2.5rem; margin-top: 3rem; }
-  .gallery-item { border: 1px solid rgba(200,169,110,0.15); background: #000; padding: 10px; }
-  .gallery-item img { width: 100%; display: block; height: auto; max-height: 550px; object-fit: cover; }
-  .photo-caption { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: rgba(220,210,195,0.45); text-transform: uppercase; margin-top: 0.8rem; text-align: right; letter-spacing: 0.05em; }
+  body {
+    background: #00000f;
+    padding: 0;
+    position: relative;
+  }
+
+  /* Static star field */
+  #travel-background {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .static-star {
+    position: absolute;
+    border-radius: 50%;
+    background: #fff;
+    animation: twinkle var(--sp) ease-in-out infinite alternate;
+    opacity: var(--op);
+  }
+  @keyframes twinkle {
+    from { opacity: var(--op); }
+    to   { opacity: calc(var(--op) * 0.25); }
+  }
+  .travel-vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(0,0,12,0.55) 100%);
+  }
+
+  .wrapper {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 7rem 2rem 6rem 2rem;
+    position: relative;
+    z-index: 3;
+  }
+
+  .back-btn {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--gold);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    display: inline-block;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid rgba(200,169,110,0.25);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .back-btn:hover { color: var(--gold-light); border-color: var(--gold); }
+
+  .page-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    color: #fff9f0;
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+    text-shadow: 0 0 30px rgba(0,0,0,1), 0 4px 12px rgba(0,0,0,1);
+  }
+  .log-meta {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.2rem;
+  }
+
+  .log-entry {
+    max-width: 780px;
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: 4rem;
+    text-shadow: 0 0 15px rgba(0,0,0,1);
+  }
+  .log-entry p + p { margin-top: 1.2rem; }
+
+  /* ── MASTER CORE PACKING ENGINE GALLERY GRID ── */
+  .gallery {
+    display: grid;
+    /* Explicitly builds exactly two uniform columns side-by-side */
+    grid-template-columns: repeat(2, 1fr) !important; 
+    gap: 2rem;
+    margin-top: 2rem;
+    /* Locks the automatic flow to packing layouts tightly */
+    grid-auto-flow: dense !important; 
+  }
+
+  .gallery-item {
+    border: 1px solid var(--border);
+    background: #02020a;
+    padding: 12px;
+    display: block; /* Removed flex here to prevent browser rendering bugs */
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .gallery-item:hover { 
+    border-color: rgba(200,169,110,0.4); 
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+  }
+
+  /* CRUCIAL FIX: Forcing explicit structural spans */
+  .gallery-item.landscape-16-9 {
+    grid-column: span 2 !important; /* Stretches completely wide on desktop */
+  }
+  .gallery-item.portrait-3-4 {
+    grid-column: span 1 !important; /* Locks side-by-side tightly on desktop */
+  }
+
+  .gallery-item .img-box {
+    width: 100% !important;
+    overflow: hidden;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 62vh !important; /* Caps view bounding to fit on screen */
+  }
+
+  /* Aspect ratio anchors mapping structural scaling frames */
+  .landscape-16-9 .img-box { aspect-ratio: 16 / 9 !important; }
+  .portrait-3-4 .img-box { aspect-ratio: 3 / 4 !important; }
+
+  .gallery-item img {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important; /* Fits entire photograph in one view window */
+    filter: brightness(0.95) contrast(1.02);
+    transition: filter 0.4s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .gallery-item:hover img { 
+    filter: brightness(1.02) contrast(1.05); 
+    transform: scale(1.015);
+  }
+
+  .photo-caption {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: rgba(200,169,110,0.5);
+    text-transform: uppercase;
+    margin-top: 1rem;
+    text-align: right;
+    letter-spacing: 0.08em;
+  }
+
+  footer {
+    text-align: center;
+    padding: 6rem 0 3rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    color: rgba(200,169,110,0.25);
+    text-transform: uppercase;
+  }
+
+  /* Responsive parameters collapse columns on small viewports */
+  @media (max-width: 768px) {
+    .wrapper { padding-top: 5.5rem; padding-left: 1.2rem; padding-right: 1.2rem; }
+    .gallery { grid-template-columns: 1fr !important; gap: 1.5rem; }
+    .gallery-item.landscape-16-9, .gallery-item.portrait-3-4 { grid-column: span 1 !important; }
+    .landscape-16-9 .img-box { aspect-ratio: 16 / 10 !important; }
+  }
 </style>
 </head>
 <body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<div id="travel-background"></div>
+<div class="travel-vignette"></div>
+
+<nav>
+  <a class="nav-logo" href="../index.html">GMB</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../research.html">Research</a></li>
+    <li><a href="../travel.html">Travel</a></li>
+    <li><a href="../index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
 <div class="wrapper">
-  <a href="index.html" class="back-btn">← Return to Space Hub</a>
-  <h1>Manali &amp; Spiti Expedition</h1>
-  <div class="log-meta">REGION: TRANS-HIMALAYA · ELEVATION: ~3,800M · PROFILE: COLD ARID DESERT</div>
   
+  <h1>Manali &amp; Spiti Expedition</h1>
+  <div class="log-meta">Region: Trans-Himalaya &nbsp;·&nbsp; Elevation: ~3,800 m</div>
+
   <div class="log-entry">
-    <p>Traveling through the high-altitude passes from Manali into the Spiti Valley reveals a stark transformation in landscape geometry. As the vegetation line falls away, the pure scale of the tectonic architecture becomes entirely visible. The thin air structures pristine conditions for capturing unscattered light across the valley plains.</p>
+    <p>Manali and Spiti valley are located in the Himachal Pradesh district of India. Notably Spiti is one of the highest villages in the world. Our journey started from Manali, seeing the greenery and then transitioning into high altitudes of Spiti. The Manali-Kaza route only opens up in June-September, and we went by HRTC bus. It was a one day journey and we could feel the altitude difference once we reached Spiti.</p>
     <p>At night, the lack of human infrastructure leaves the sky completely dark, providing views of the cosmos that match the calibration baselines of isolated scientific observatories.</p>
   </div>
 
   <div class="gallery">
-    <div class="gallery-item">
-      <img src="images/spiti_1.webp" alt="Spiti Valley High Peaks">
-      <div class="photo-caption">Log 01 // Mountain Ridge Contours · Blue Hour Peak Exposure</div>
+    
+    <div class="gallery-item portrait-3-4">
+      <div class="img-box">
+        <img src="../images/spiti4.jpg" alt="Near Atal Tunnel.">
+      </div>
+      <div class="photo-caption">View near Atal Tunnel</div>
     </div>
-    <div class="gallery-item">
-      <img src="images/spiti_2.webp" alt="Kaza Monastery Landscape">
-      <div class="photo-caption">Log 02 // Structural Architecture Across Arid Valleys</div>
+    
+    <div class="gallery-item portrait-3-4">
+      <div class="img-box">
+        <img src="../images/spiti8.jpg" alt="Kaza Monastery Landscape">
+      </div>
+      <div class="photo-caption">Sipping tea after trek at Hamta Pass</div>
     </div>
-    <div class="gallery-item">
-      <img src="images/spiti_3.webp" alt="Spiti Stargazing Trail">
-      <div class="photo-caption">Log 03 // Unscattered Night Sky Profile · Long Exposure Frame</div>
+    
+    <div class="gallery-item landscape-16-9">
+      <div class="img-box">
+        <img src="../images/spiti7.jpg" alt="Spiti Stargazing Trail">
+      </div>
+      <div class="photo-caption">Waterfall near Sissu</div>
     </div>
+    
+    <div class="gallery-item portrait-3-4">
+      <div class="img-box">
+        <img src="../images/spiti6.jpg" alt="Spiti Valley Panorama">
+      </div>
+      <div class="photo-caption">A peak on route Manali - Kaza</div>
+    </div>
+    
+    <div class="gallery-item portrait-3-4">
+      <div class="img-box">
+        <img src="../images/spiti3.jpg" alt="Spiti Valley Road">
+      </div>
+      <div class="photo-caption">Key Monastery</div>
+    </div>
+
+    <div class="gallery-item portrait-3-4">
+      <div class="img-box">
+        <img src="../images/spiti2.jpg" alt="Spiti Landscape Profile">
+      </div>
+      <div class="photo-caption">Chandratal Lake</div>
+    </div>
+    
+    <div class="gallery-item portrait-3-4">
+      <div class="img-box">
+        <img src="../images/spiti5.jpg" alt="High Altitude Pass">
+      </div>
+      <div class="photo-caption">Night Sky at Kaza, View from the terrace</div>
+    </div>
+
   </div>
+
+  <footer>
+    &copy; 2026 Gregory Mathews Ben
+  </footer>
 </div>
+
+<script src="../js/cursor.js"></script>
+<script>
+  (function () {
+    const bg = document.getElementById('travel-background');
+    for (let i = 0; i < 220; i++) {
+      const star = document.createElement('div');
+      star.className = 'static-star';
+      const size  = Math.random() * 1.4 + 0.2;
+      const op    = (Math.random() * 0.35 + 0.08).toFixed(2);
+      const sp    = (3 + Math.random() * 5).toFixed(1) + 's';
+      const delay = (Math.random() * 6).toFixed(1) + 's';
+      star.style.cssText = `
+        width:${size}px; height:${size}px;
+        top:${Math.random()*100}%; left:${Math.random()*100}%;
+        --op:${op}; --sp:${sp}; animation-delay:${delay};
+      `;
+      bg.appendChild(star);
+    }
+  })();
+</script>
+
 </body>
 </html>

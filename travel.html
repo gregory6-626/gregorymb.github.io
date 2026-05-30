@@ -4,89 +4,296 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Terrestrial Observations · Gregory Mathews Ben</title>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Cormorant+Garamond:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-<style>
-  body { background: #0a0d16; color: #f5f0e8; font-family: 'EB Garamond', Georgia, serif; padding: 6rem 2rem; line-height: 1.8; }
-  .wrapper { max-width: 850px; margin: 0 auto; }
-  .back-btn { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: #c8a96e; text-decoration: none; text-transform: uppercase; letter-spacing: 0.15em; display: inline-block; margin-bottom: 3rem; }
-  h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300; font-size: 2.8rem; margin-bottom: 3rem; }
-  .travel-grid { display: flex; flex-direction: column; gap: 4rem; }
-  .travel-item { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2.5rem; align-items: center; border-bottom: 1px solid rgba(200,169,110,0.12); padding-bottom: 3rem; }
-  .travel-item:last-child { border: none; }
-  .img-link { border: 1px solid rgba(200,169,110,0.15); display: block; overflow: hidden; background: #000; }
-  .img-link img { width: 100%; height: 240px; object-fit: cover; filter: grayscale(20%) brightness(0.8); transition: transform 0.5s, filter 0.5s; display: block; }
-  .img-link:hover img { transform: scale(1.02); filter: grayscale(0%) brightness(1); }
-  .meta { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: #c8a96e; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
-  h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; margin-bottom: 0.8rem; }
-  .notes { font-style: italic; color: rgba(220,210,195,0.6); font-size: 0.95rem; margin-top: 0.8rem; border-left: 1px solid rgba(200,169,110,0.3); padding-left: 0.8rem; }
-  @media(max-width:768px){ .travel-item { grid-template-columns: 1fr; gap: 1.5rem; } }
-  /* ── NAV BAR RESTORED & OPTIMIZED ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.4rem 3.5rem;
-    background: linear-gradient(to bottom, rgba(0,0,15,0.85) 0%, transparent 100%);
-    backdrop-filter: blur(2px);
-  }
-  .nav-logo {
-    font-family: var(--font-display); font-size: 1.1rem;
-    color: var(--gold); letter-spacing: 0.08em; font-weight: 600; text-decoration: none;
-  }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a {
-    font-family: var(--font-mono); font-size: 0.7rem; font-weight: 300;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: rgba(220,210,195,0.6); text-decoration: none; transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--gold); }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 
+<style>
+  body {
+    background: #00000f;
+    padding: 0;
+    position: relative;
+  }
+
+  /* Subtle static star field — no disc, just quiet deep space */
+  #travel-background {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .static-star {
+    position: absolute;
+    border-radius: 50%;
+    background: #fff;
+    animation: twinkle var(--sp) ease-in-out infinite alternate;
+    opacity: var(--op);
+  }
+  @keyframes twinkle {
+    from { opacity: var(--op); }
+    to   { opacity: calc(var(--op) * 0.25); }
+  }
+
+  /* Gradient vignette so stars fade toward the content */
+  .travel-vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(0,0,12,0.55) 100%);
+  }
+
+  .wrapper {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 7rem 2rem 6rem 2rem;
+    position: relative;
+    z-index: 3;
+  }
+
+  /* ── Page header ── */
+  .page-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    color: #fff9f0;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 30px rgba(0,0,0,1), 0 4px 12px rgba(0,0,0,1);
+  }
+  .page-intro {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 580px;
+    margin-bottom: 5rem;
+    text-shadow: 0 0 20px rgba(0,0,0,1);
+  }
+
+  /* ── Travel entries ── */
+  .travel-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .travel-row {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 3rem;
+    padding: 3.5rem 0;
+    border-top: 1px solid var(--border);
+    align-items: start;
+  }
+  .travel-row:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Image */
+  .travel-img-wrap {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #000;
+    transition: border-color 0.3s;
+  }
+  .travel-img-wrap:hover {
+    border-color: rgba(200,169,110,0.4);
+  }
+  .travel-img-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: grayscale(25%) brightness(0.78);
+    transition: transform 0.55s ease, filter 0.55s ease;
+  }
+  .travel-img-wrap:hover img {
+    transform: scale(1.03);
+    filter: grayscale(0%) brightness(0.95);
+  }
+
+  /* Text side */
+  .travel-meta {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+  .travel-row h2 {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: #fff9f0;
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+    text-shadow: 0 0 15px rgba(0,0,0,1);
+  }
+  .travel-row p {
+    font-size: 0.97rem;
+    color: var(--muted);
+    line-height: 1.7;
+    text-shadow: 0 0 12px rgba(0,0,0,1);
+  }
+  .travel-note {
+    font-style: italic;
+    font-size: 0.92rem;
+    color: rgba(220,210,195,0.5);
+    border-left: 1px solid rgba(200,169,110,0.3);
+    padding-left: 0.9rem;
+    margin-top: 1rem;
+    line-height: 1.6;
+  }
+  .travel-read-link {
+    display: inline-block;
+    margin-top: 1.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(200,169,110,0.3);
+    padding-bottom: 2px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .travel-read-link:hover {
+    color: var(--gold-light);
+    border-color: var(--gold);
+  }
+
+  footer {
+    text-align: center;
+    padding: 4rem 0 3rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    color: rgba(200,169,110,0.25);
+    text-transform: uppercase;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .wrapper { padding-top: 5.5rem; }
+    .travel-row {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+    }
+    .travel-img-wrap img { height: auto; }
+  }
 </style>
 </head>
 <body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Static star-field background -->
+<div id="travel-background" id="stars-bg"></div>
+<div class="travel-vignette"></div>
+
 <nav>
   <a class="nav-logo" href="index.html">GMB</a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="research.html">Research</a></li>
     <li><a href="travel.html">Travel</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
   </ul>
 </nav>
+
 <div class="wrapper">
-  <a href="index.html" class="back-btn">← Return to Hub</a>
+  <span class="page-label">03 · Field Notes</span>
   <h1>Terrestrial Observations</h1>
-  
-  <div class="travel-grid">
-    <div class="travel-item">
-      <a href="spiti.html" class="img-link"><img src="spiti_cover.webp" alt="Spiti"></a>
+  <p class="page-intro">
+    Apart from data analysis and modelling, I find myself drawn to landscapes - 
+    places where light behaves strangely, where the sky feels close, 
+    and a feeling of tranquility. Here are some of my recent travels.
+  </p>
+
+  <div class="travel-list">
+
+    <div class="travel-row">
+      <a href="travelogues/spiti.html" class="travel-img-wrap">
+        <img src="images/spiti1.jpg" alt="Spiti Valley">
+      </a>
       <div>
-        <div class="meta">32.2461° N, 78.0349° E · PASS</div>
+        <div class="travel-meta">32.2461° N, 78.0349° E · Himachal Pradesh</div>
         <h2>Manali &amp; Spiti</h2>
-        <p>Arid alpine ranges where thin air layers allow pristine visibility parameters.</p>
-        <div class="notes">"Zero light pollution footprints. Night fields reveal intense sky clarity profiles."</div>
+        <p>Mighty Himalayan ranges and zero light pollution reveal the Milky Way in detail. Cold nights, slow exposures, and the silence of high altitude.</p>
+        <div class="travel-note">"The sky here feels like a data cube — layer after layer, all the way back."</div>
+        <a href="travelogues/spiti.html" class="travel-read-link">Read journal →</a>
       </div>
     </div>
 
-    <div class="travel-item">
-      <a href="meghalaya.html" class="img-link"><img src="meghalaya_cover.webp" alt="Meghalaya"></a>
+    <div class="travel-row">
+      <a href="travelogues/meghalaya.html" class="travel-img-wrap">
+        <img src="images/meghalaya_cover.webp" alt="Meghalaya">
+      </a>
       <div>
-        <div class="meta">25.5788° N, 91.8933° E · VALLEY</div>
+        <div class="travel-meta">25.5788° N, 91.8933° E · Meghalaya</div>
         <h2>The Abode of Clouds</h2>
-        <p>High-humidity geographic canyons tracking continuous cloud formation patterns.</p>
-        <div class="notes">"Mist flowing sequentially through steep gorges. Light scatters extensively across vapor layers."</div>
+        <p>Deep gorges and perpetual mist. Light scatters through dense vapor in ways that remind me of optically thick disc surfaces — beautiful and disorienting in equal measure.</p>
+        <div class="travel-note">"Mist flows through the canyons like gas through a gap-opening planet's wake."</div>
+        <a href="meghalaya.html" class="travel-read-link">Read journal →</a>
       </div>
     </div>
 
-    <div class="travel-item">
-      <a href="nainital.html" class="img-link"><img src="nainital_cover.webp" alt="Nainital"></a>
+    <div class="travel-row">
+      <a href="travelogues/nainital.html" class="travel-img-wrap">
+        <img src="images/nainital_cover.webp" alt="Nainital">
+      </a>
       <div>
-        <div class="meta">29.3919° N, 79.4542° E · RANGE</div>
+        <div class="travel-meta">29.3919° N, 79.4542° E · Uttarakhand</div>
         <h2>Nainital</h2>
-        <p>Capturing slow exposures beside symmetrical highland lake water surfaces.</p>
-        <div class="notes">"Reflective water boundaries serving effectively as a collection mirror frame during twilight."</div>
+        <p>Long exposures beside a highland lake at twilight. The water surface acts as a perfect flat mirror — a natural reflection nebula at low altitude.</p>
+        <div class="travel-note">"Still water at dusk: the closest thing to a flat-field calibration frame in nature."</div>
+        <a href="nainital.html" class="travel-read-link">Read journal →</a>
       </div>
     </div>
+
   </div>
+
+  <footer>
+    &copy; 2026 Gregory Mathews Ben
+  </footer>
 </div>
+
+<script src="js/cursor.js"></script>
+<script>
+  // Generate gentle static star field — no animation engine needed
+  (function () {
+    const bg = document.getElementById('travel-background');
+    const count = 220;
+    for (let i = 0; i < count; i++) {
+      const star = document.createElement('div');
+      star.className = 'static-star';
+      const size = Math.random() * 1.4 + 0.2;
+      const op   = (Math.random() * 0.35 + 0.08).toFixed(2);
+      const sp   = (3 + Math.random() * 5).toFixed(1) + 's';
+      const delay = (Math.random() * 6).toFixed(1) + 's';
+      star.style.cssText = `
+        width: ${size}px; height: ${size}px;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        --op: ${op}; --sp: ${sp};
+        animation-delay: ${delay};
+      `;
+      bg.appendChild(star);
+    }
+  })();
+</script>
 </body>
 </html>
