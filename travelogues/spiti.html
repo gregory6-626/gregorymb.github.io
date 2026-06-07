@@ -202,71 +202,103 @@
   }
 
   /* Responsive parameters collapse columns on small viewports */
-  /* ── MOBILE RESPONSIVE PLATFORM COLLAPSE ── */
+ /* ── FULL MOBILE RESPONSIVE PLATFORM OVERHAUL ── */
   @media (max-width: 768px) {
-    /* Tighten parent padding boundaries for mobile screens */
+    /* Tighten global wrapper spacing scales for small phone displays */
     .wrapper { 
-      padding: 5.5rem 1rem 3rem 1rem; 
+      padding: 5.5rem 1rem 3rem 1rem !important; 
+      max-width: 100% !important;
+      box-sizing: border-box;
     }
     
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.8rem !important;
+      line-height: 1.2 !important;
+      margin-bottom: 0.5rem !important;
     }
 
     .log-meta {
-      margin-bottom: 2rem;
-      padding-bottom: 0.8rem;
+      margin-bottom: 1.5rem !important;
+      padding-bottom: 0.8rem !important;
+      font-size: 0.6rem !important;
     }
 
     .log-entry {
-      font-size: 1rem;
-      line-height: 1.7;
-      margin-bottom: 2.5rem;
+      font-size: 0.95rem !important;
+      line-height: 1.65 !important;
+      margin-bottom: 2rem !important;
     }
 
-    /* ── GRID SYSTEM BREAKDOWN FOR MOBILE ── */
+    /* ── RESET GRID OVERFLOW CONSTRAINT ── */
     .gallery { 
-      /* Collapses the grid layout completely down to a single column vertical stack */
-      grid-template-columns: 1fr !important; 
-      gap: 1.8rem; 
-      grid-auto-flow: row !important; /* Reverts dynamic dense flow layout safely */
+      display: flex !important;
+      flex-direction: column !important; /* Completely bypasses complex grid math to stack vertically */
+      gap: 2rem !important; 
+      width: 100% !important;
+      min-width: 0 !important;
     }
 
-    /* Force all photography elements to occupy 100% full-screen width */
+    /* Force every individual card box to occupy 100% full screen width */
+    .gallery-item {
+      width: 100% !important;
+      max-width: 100% !important;
+      display: block !important;
+      box-sizing: border-box !important;
+      padding: 12px !important;
+      margin: 0 0 0.5rem 0 !important;
+    }
+
     .gallery-item.landscape-16-9, 
     .gallery-item.portrait-3-4 { 
-      grid-column: span 1 !important; 
+      width: 100% !important;
+      max-width: 100% !important;
     }
 
-    /* Loosen mobile max-height limits so nothing gets pinched or cropped */
+    /* Keep the image preview box clean and uncropped */
     .gallery-item .img-box {
-      max-height: 50vh !important; 
+      width: 100% !important;
+      max-height: 45vh !important; 
+      overflow: hidden !important;
     }
 
-    /* Loosen fixed aspect-ratio rules on small phones to maximize real estate */
+    /* Re-balance aspect ratio locks safely on small devices */
     .portrait-3-4 .img-box { 
-      aspect-ratio: 4 / 5 !important; /* Slightly wider crop parameters for mobile displays */
+      aspect-ratio: 4 / 5 !important; /* Slightly wider crop window for compact devices */
     }
     .landscape-16-9 .img-box { 
       aspect-ratio: 16 / 10 !important; 
     }
 
-    /* Collapse your dynamic multi-column narrative spans back into a single column text flow */
+    .gallery-item img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+    }
+
+    /* ── CAPTION TEXT ALIGNMENT REPAIR ── */
+    /* Expands text bounds across the full width of the card box */
+    .photo-caption {
+      font-size: 0.65rem !important;
+      margin-top: 0.8rem !important;
+      text-align: left !important; /* Left alignment looks cleaner on phone frames */
+      line-height: 1.4 !important;
+      width: 100% !important;
+      display: block !important;
+      white-space: normal !important; /* Allows text to wrap normally onto new lines */
+      letter-spacing: 0.05em !important;
+    }
+
+    /* Clean narrative text rows on mobile */
     .gallery .text-entry-span { 
-      column-count: 1 !important; 
-      padding: 0.5rem 0;
+      column-count: 1 !important; /* Disables two-column newspaper layouts on mobile */
+      padding: 0.5rem 0 !important;
+      width: 100% !important;
     }
     
     .gallery .text-entry-span p {
-      font-size: 1rem;
-      line-height: 1.7;
-      text-align: left; /* Avoid heavy text gaps from justify alignments on narrow devices */
-    }
-
-    .photo-caption {
-      font-size: 0.6rem;
-      margin-top: 0.6rem;
+      font-size: 0.95rem !important;
+      line-height: 1.65 !important;
+      text-align: left !important;
     }
   }
 </style>
