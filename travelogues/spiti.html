@@ -202,12 +202,72 @@
   }
 
   /* Responsive parameters collapse columns on small viewports */
+  /* ── MOBILE RESPONSIVE PLATFORM COLLAPSE ── */
   @media (max-width: 768px) {
-    .wrapper { padding-top: 5.5rem; padding-left: 1.2rem; padding-right: 1.2rem; }
-    .gallery { grid-template-columns: 1fr !important; gap: 1.5rem; }
-    .gallery-item.landscape-16-9, .gallery-item.portrait-3-4 { grid-column: span 1 !important; }
-    .landscape-16-9 .img-box { aspect-ratio: 16 / 10 !important; }
-    .gallery .text-entry-span { column-count: 1; }
+    /* Tighten parent padding boundaries for mobile screens */
+    .wrapper { 
+      padding: 5.5rem 1rem 3rem 1rem; 
+    }
+    
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .log-meta {
+      margin-bottom: 2rem;
+      padding-bottom: 0.8rem;
+    }
+
+    .log-entry {
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── GRID SYSTEM BREAKDOWN FOR MOBILE ── */
+    .gallery { 
+      /* Collapses the grid layout completely down to a single column vertical stack */
+      grid-template-columns: 1fr !important; 
+      gap: 1.8rem; 
+      grid-auto-flow: row !important; /* Reverts dynamic dense flow layout safely */
+    }
+
+    /* Force all photography elements to occupy 100% full-screen width */
+    .gallery-item.landscape-16-9, 
+    .gallery-item.portrait-3-4 { 
+      grid-column: span 1 !important; 
+    }
+
+    /* Loosen mobile max-height limits so nothing gets pinched or cropped */
+    .gallery-item .img-box {
+      max-height: 50vh !important; 
+    }
+
+    /* Loosen fixed aspect-ratio rules on small phones to maximize real estate */
+    .portrait-3-4 .img-box { 
+      aspect-ratio: 4 / 5 !important; /* Slightly wider crop parameters for mobile displays */
+    }
+    .landscape-16-9 .img-box { 
+      aspect-ratio: 16 / 10 !important; 
+    }
+
+    /* Collapse your dynamic multi-column narrative spans back into a single column text flow */
+    .gallery .text-entry-span { 
+      column-count: 1 !important; 
+      padding: 0.5rem 0;
+    }
+    
+    .gallery .text-entry-span p {
+      font-size: 1rem;
+      line-height: 1.7;
+      text-align: left; /* Avoid heavy text gaps from justify alignments on narrow devices */
+    }
+
+    .photo-caption {
+      font-size: 0.6rem;
+      margin-top: 0.6rem;
+    }
   }
 </style>
 </head>
