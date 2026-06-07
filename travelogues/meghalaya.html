@@ -202,12 +202,105 @@
   }
 
   /* Responsive parameters collapse columns on small viewports */
+  /* ── FULL MOBILE RESPONSIVE PLATFORM OVERHAUL ── */
   @media (max-width: 768px) {
-    .wrapper { padding-top: 5.5rem; padding-left: 1.2rem; padding-right: 1.2rem; }
-    .gallery { grid-template-columns: 1fr !important; gap: 1.5rem; }
-    .gallery-item.landscape-16-9, .gallery-item.portrait-3-4 { grid-column: span 1 !important; }
-    .landscape-16-9 .img-box { aspect-ratio: 16 / 10 !important; }
-    .gallery .text-entry-span { column-count: 1; }
+    /* Tighten global wrapper spacing scales for small phone displays */
+    .wrapper { 
+      padding: 5.5rem 1rem 3rem 1rem !important; 
+      max-width: 100% !important;
+      box-sizing: border-box;
+    }
+    
+    h1 {
+      font-size: 1.8rem !important;
+      line-height: 1.2 !important;
+      margin-bottom: 0.5rem !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 5, 0.8);
+    }
+
+    .log-meta {
+      margin-bottom: 1.5rem !important;
+      padding-bottom: 0.8rem !important;
+      font-size: 0.6rem !important;
+    }
+
+    .log-entry {
+      font-size: 0.95rem !important;
+      line-height: 1.65 !important;
+      margin-bottom: 2rem !important;
+    }
+
+    /* ── RESET GRID OVERFLOW CONSTRAINT ── */
+    .gallery { 
+      display: flex !important;
+      flex-direction: column !important; /* Completely bypasses complex grid math to stack vertically */
+      gap: 2rem !important; 
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    /* Force every individual card box to occupy 100% full screen width */
+    .gallery-item {
+      width: 100% !important;
+      max-width: 100% !important;
+      display: block !important;
+      box-sizing: border-box !important;
+      padding: 12px !important;
+      margin: 0 0 0.5rem 0 !important;
+    }
+
+    .gallery-item.landscape-16-9, 
+    .gallery-item.portrait-3-4 { 
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    /* Keep the image preview box clean and uncropped */
+    .gallery-item .img-box {
+      width: 100% !important;
+      max-height: 45vh !important; 
+      overflow: hidden !important;
+    }
+
+    /* Re-balance aspect ratio locks safely on small devices */
+    .portrait-3-4 .img-box { 
+      aspect-ratio: 4 / 5 !important; /* Slightly wider crop window for compact devices */
+    }
+    .landscape-16-9 .img-box { 
+      aspect-ratio: 16 / 10 !important; 
+    }
+
+    .gallery-item img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+    }
+
+    /* ── CAPTION TEXT ALIGNMENT REPAIR ── */
+    /* Expands text bounds across the full width of the card box */
+    .photo-caption {
+      font-size: 0.65rem !important;
+      margin-top: 0.8rem !important;
+      text-align: left !important; /* Left alignment looks cleaner on phone frames */
+      line-height: 1.4 !important;
+      width: 100% !important;
+      display: block !important;
+      white-space: normal !important; /* Allows text to wrap normally onto new lines */
+      letter-spacing: 0.05em !important;
+    }
+
+    /* Clean narrative text rows on mobile */
+    .gallery .text-entry-span { 
+      column-count: 1 !important; /* Disables two-column newspaper layouts on mobile */
+      padding: 0.5rem 0 !important;
+      width: 100% !important;
+    }
+    
+    .gallery .text-entry-span p {
+      font-size: 0.95rem !important;
+      line-height: 1.65 !important;
+      text-align: left !important;
+    }
   }
 </style>
 </head>
